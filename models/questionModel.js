@@ -4,16 +4,24 @@ const Schema = mongoose.Schema
 
 const questionSchema = new Schema({
     quizId: {
-        type: ObjectID,
+        type: ObjectId,
         ref: 'Quiz'
     },
-    title: {
+    question: {
         type: String,
         required: true
     },
     image: {
         type: String,
         required: false
+    },
+    correctAnswer: {
+        type: String,
+        required: true
+    },
+    incorrectAnswers: {
+        type: String,
+        required: true
     }
 })
 
