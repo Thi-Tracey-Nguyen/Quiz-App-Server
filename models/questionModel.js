@@ -14,7 +14,7 @@ const questionSchema = new Schema({
     image: {
         type: String,
         required: false
-    }, 
+    },
     correctAnswer: {
         type: String,
         required: true
