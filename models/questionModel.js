@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 
 const questionSchema = new Schema({
     quizId: {
-        type: ObjectId,
+        type: mongoose.ObjectId,
         ref: 'Quiz'
     },
     question: {
@@ -20,7 +20,7 @@ const questionSchema = new Schema({
         required: true
     },
     incorrectAnswers: {
-        type: String,
+        type: Array,
         required: true
     }
 })

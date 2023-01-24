@@ -8,7 +8,7 @@ const quizSchema = new Schema({
         ref: 'Category'
     },
     questions: {
-        type: String,
+        type: Array,
         required: true
     },
     image: {
