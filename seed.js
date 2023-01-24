@@ -212,12 +212,12 @@ const questionsQ1 = await QuestionModel.insertMany(questionsArrayQ1)
 console.log('Questions seeded successfully to Quiz 0')
 
 // pushing the questions to corresponding quiz 
-console.log(questionsQ0)
+// console.log(questionsQ0)
 // console.log(quizzes)
 
 async function pushQuestions(questions, index) {
     questions.forEach(question => {
-        quizzes[index].questions.push(question.id)
+        quizzes[index].questions.push(question)
     })
 
     await quizzes[index].save().then(() => {
