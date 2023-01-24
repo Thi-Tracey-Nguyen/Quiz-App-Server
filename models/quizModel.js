@@ -4,20 +4,16 @@ const Schema = mongoose.Schema
 
 const quizSchema = new Schema({
     category: {
-        type: mongoose.ObjectID,
+        type: mongoose.ObjectId,
         ref: 'Category'
     },
-    question: {
-        type: String,
+    questions: {
+        type: Array,
         required: true
     },
     image: {
         type: String,
         required: false
-    }, 
-    correctAnswer: {
-        type: String,
-        required: true
     }
 })
 
