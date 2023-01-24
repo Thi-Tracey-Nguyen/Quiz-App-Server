@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
+import { dbConnect } from '../db.js'
 
+dbConnect()
 const Schema = mongoose.Schema
 
 const categorySchema = new Schema({
