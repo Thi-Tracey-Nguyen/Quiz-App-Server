@@ -7,6 +7,10 @@ const quizSchema = new Schema({
         type: mongoose.ObjectId,
         ref: 'Category'
     },
+    title: {
+        type: String,
+        required: true
+    }, 
     questions: {
         type: Array,
         required: true

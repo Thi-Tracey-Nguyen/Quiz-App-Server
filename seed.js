@@ -23,12 +23,12 @@ const categories = await CategoryModel.insertMany(categoriesArray)
 console.log('All categories seeded successfully')
 
 const quizzesArray = [
-    { category: categories[0], questions: [] },
-    { category: categories[0], questions: [] },
-    { category: categories[1], questions: [] },
-    { category: categories[1], questions: [] },
-    { category: categories[2], questions: [] },
-    { category: categories[2], questions: [] }
+    { category: categories[0], title: 'Random Facts', questions: [] },
+    { category: categories[0], title: 'Chemistry Facts', questions: [] },
+    { category: categories[1], title: 'Movie Trivia',  questions: [] },
+    { category: categories[1], title: 'Geeky Shows', questions: [] },
+    { category: categories[2], title: 'Geography Master', questions: [] },
+    { category: categories[2], title: 'Rivers & Australia', questions: [] }
 ]
 
 // Insert quizzes into the database
