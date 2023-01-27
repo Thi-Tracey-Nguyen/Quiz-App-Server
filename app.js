@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import categoryRouter from './routes/category.js'
 import quizRouter from './routes/quiz.js'
+import questionsRouter from './routes/question.js'
 
 // const categories = ['Science', 'Movies', 'Geography', 'Music']
 
@@ -20,6 +21,9 @@ app.use('/categories', categoryRouter)
 
 
 app.use('/quizzes', quizRouter)
+
+
+app.use('/questions', questionsRouter)
 
 
 

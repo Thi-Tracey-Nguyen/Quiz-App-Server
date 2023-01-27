@@ -19,4 +19,44 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+router.post('/', async (req, res) => {
+  try {
+      const quiz = new QuizModel(req.body)
+      const newQuiz = await quiz.save()
+      res.send(newQuiz)
+  } catch (err) {
+      res.status(500).send({ error: err.message })
+  }
+})
+
+
+router.delete('/:id', async (req, res) => {
+  try {
+      const quiz = await QuizModel.findByIdAndDelete(req.params.id)
+      if (!quiz) {
+          res.status(404).send({ error: 'Quiz not found!' })
+      } else {
+          res.send(quiz)
+      }
+  } catch (err) {
+      res.status(500).send({ error: err.message })
+  }
+})
+
+
+router.patch('/:id', async (req, res) => {
+  try {
+      const quiz = await QuizModel.findByIdAndUpdate(req.params.id, req.body, {new: true})
+      if (!quiz) {
+          res.status(404).send({ error: 'Quiz not found!' })
+      } else {
+          res.send(quiz)
+      }
+  } catch (err) {
+      res.status(500).send({ error: err.message })
+  }
+})
+
+
+
 export default router
