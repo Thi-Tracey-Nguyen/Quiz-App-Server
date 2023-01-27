@@ -72,6 +72,30 @@ const questionsArray = [
         question: 'Which of the following movies did Nicolas Cage not star in?',
         correctAnswer: 'The Wrestler',
         incorrectAnswers: ['The Rock', 'National Treasure', 'Ghost Rider']
+    }, 
+    {
+        quizId: quizzes[2],
+        question: 'Which of the following movies did Nicolas Cage not star in?',
+        correctAnswer: 'The Wrestler',
+        incorrectAnswers: ['The Rock', 'National Treasure', 'Ghost Rider']
+    }, 
+    {
+        quizId: quizzes[2],
+        question: 'The 2002 film &quot;28 Days Later&quot; is mainly set in which European country?',
+        correctAnswer: 'United Kingdom',
+        incorrectAnswers: ['France', 'Italy', 'Germany']
+    }, 
+    {
+        quizId: quizzes[2],
+        question: 'Darth Vader&#039;s famous reveal to Luke is iconic. But which of these is the right one?',
+        correctAnswer: '&quot;No. I am your father.&quot;',
+        incorrectAnswers: ['&quot;Luke, I am your father.&quot;', '&quot;You&#039;re wrong. &quot', '&quot;The truth is that I am your father.&quot;']
+    }, 
+    {
+        quizId: quizzes[2],
+        question: 'According to &quot;Star Wars&quot; lore, which planet does Obi-Wan Kenobi come from?',
+        correctAnswer: 'Stewjon',
+        incorrectAnswers: ['Alderaan', 'Tatooine', 'Naboo']
     }],
     [{
         quizId: quizzes[3],
