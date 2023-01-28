@@ -76,8 +76,8 @@ const questionsArray = [
     {
         quizId: quizzes[2],
         question: "What's the name of the skyscraper in Die Hard?",
-        correctAnswer: "Nakatomi Plaza,
-        incorrectAnswers: ["Namitoki Plaza", 'Bradbury Building', 'The Dakota']
+        correctAnswer: "Nakatomi Plaza",
+        incorrectAnswers: ["Anatomy Plaza", 'Bradbury Building', 'The Dakota']
     }, 
     {
         quizId: quizzes[2],
