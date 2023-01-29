@@ -28,8 +28,11 @@ router.post('/', async (req, res) => {
     await newCategory.save()
     res.status(201).send(newCategory)
   } catch (err) {
-    res.status(400).send({ error: err.message })
+    if (err.code === 11000) {
+      res.status(409).send({ error: 'Sorry! Category already exists!' })
   }
+     res.status(500).send({ error: err.message })
+  } 
 })
 
 router.delete('/:id', async (req, res) => {
