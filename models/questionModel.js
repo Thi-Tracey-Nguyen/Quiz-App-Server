@@ -9,7 +9,8 @@ const questionSchema = new Schema({
     },
     question: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     image: {
         type: String,
