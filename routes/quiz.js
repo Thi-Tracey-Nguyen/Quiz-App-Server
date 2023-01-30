@@ -19,18 +19,22 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// route to post new quiz
 router.post("/", async (req, res) => {
   try {
     // 1. extract information from the user's input
     const { category, title, author, image } = req.body
+
+    // 2. Create a new quiz object
+    // 2.1 Check if the category exists
     const categoryObject = await CategoryModel.findOne({ _id: category })
     if (categoryObject) {
       const newQuiz = { category, title, author, image }
 
-      // 2. Create a new quiz using newQuiz (sanitised values) 
+      // 2.2. Create a new quiz using newQuiz (sanitised values) 
       const insertedQuiz = await QuizModel.create(newQuiz)
 
-      // 3. Send back the new quiz with 201 status
+      // 2.3. Send back the new quiz with 201 status
       // res.status(201).send(await insertedQuiz.populate({ path: 'category', select: 'name' }))
       res.status(201).send(insertedQuiz)
     } else {
