@@ -5,16 +5,12 @@ const Schema = mongoose.Schema
 const questionSchema = new Schema({
     quizId: {
         type: mongoose.ObjectId,
-        ref: 'Quiz'
+        ref: 'Quiz', 
+        required: true
     },
     question: {
         type: String,
-        required: true,
-        unique: true
-    },
-    image: {
-        type: String,
-        required: false
+        required: true
     },
     correctAnswer: {
         type: String,
@@ -25,6 +21,9 @@ const questionSchema = new Schema({
         required: true
     }
 })
+
+//ensure the combination of question and quizId is unique
+questionSchema.index({ quizId: 1, question: 1 }, { unique: true })
 
 const QuestionModel = mongoose.model('Question', questionSchema)
 

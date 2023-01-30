@@ -21,14 +21,26 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
+    //1. Extract info from the user input
+    const quiz = await QuizModel.findById(req.params.quizId)
+    if (quiz) {
+      const newQuestion = new QuestionModel(req.body)
+      const savedQuestion = await newQuestion.save()
+      quiz.questions.push(savedQuestion)
+      await quiz.save()
+      res.send(savedQuestion)
+    } else {
+      res.status(404).send({ error: "Quiz not found!" })
+    }
     const newQuestion = new QuestionModel(req.body);
     const savedQuestion = await newQuestion.save();
     res.send(savedQuestion);
   } catch (err) {
     if (err.code === 11000) {
-      res.status(409).send({ error: "Sorry! Question already exists!" });
+      res.status(409).send({ error: "Sorry! Question already exists!" })
     }
     res.status(500).send({ error: err.message });
+    // res.send({ error: err.message })
   }
 });
 
