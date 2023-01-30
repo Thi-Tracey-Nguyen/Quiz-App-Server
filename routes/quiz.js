@@ -1,5 +1,6 @@
-import express from "express";
-import QuizModel from "../models/quizModel.js";
+import express from "express"
+import QuizModel from "../models/quizModel.js"
+import CategoryModel from "../models/categoryModel.js"
 
 const router = express.Router();
 
@@ -20,16 +21,26 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const quiz = new QuizModel(req.body);
-    const newQuiz = await quiz.save();
-    res.send(newQuiz);
-  } catch (err) {
-    if (err.code === 11000) {
-      res.status(409).send({ error: "Sorry! Quiz already exists!" });
+    // 1. extract information from the user's input
+    const { category, title, author, image } = req.body
+    const categoryObject = await CategoryModel.findOne({ _id: category })
+    if (categoryObject) {
+      const newQuiz = { category, title, author, image }
+
+      // 2. Create a new quiz using newQuiz (sanitised values) 
+      const insertedQuiz = await QuizModel.create(newQuiz)
+
+      // 3. Send back the new quiz with 201 status
+      // res.status(201).send(await insertedQuiz.populate({ path: 'category', select: 'name' }))
+      res.status(201).send(insertedQuiz)
+    } else {
+      res.status(404).send({ error: 'Category not found'})
     }
-    res.status(500).send({ error: err.message });
   }
-});
+  catch (err) {
+    res.status(500).send({ error: err.message })
+  }
+})
 
 router.delete("/:id", async (req, res) => {
   try {

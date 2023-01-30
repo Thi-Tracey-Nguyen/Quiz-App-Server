@@ -5,7 +5,8 @@ const Schema = mongoose.Schema
 const quizSchema = new Schema({
     category: {
         type: mongoose.ObjectId,
-        ref: 'Category'
+        ref: 'Category', 
+        required: true
     },
     title: {
         type: String,
@@ -18,9 +19,9 @@ const quizSchema = new Schema({
     },
     questions: {
         type: Array,
-        required: true
+        required: true 
     },
-    image: {
+    image: {    
         type: String,
         required: false
     }
