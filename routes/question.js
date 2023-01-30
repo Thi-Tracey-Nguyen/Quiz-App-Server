@@ -8,12 +8,11 @@ router.get("/", async (req, res) => res.send(await QuestionModel.find()));
 
 router.get("/:id", async (req, res) => {
   try {
-    const quiz = await QuizModel.findById(req.params.id);
-    if (quiz) {
-      const questions = await QuestionModel.find({ quizId: req.params.id });
-      res.send(questions);
+    const question = await QuestionModel.findById(req.params.id);
+    if (question) {      
+      res.send(question);
     } else {
-      res.status(404).send({ error: "Quizzes not found!" });
+      res.status(404).send({ error: "Question not found!" });
     }
   } catch (err) {
     res.status(500).send({ error: err.message });
