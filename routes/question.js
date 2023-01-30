@@ -19,28 +19,32 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// route to post new questions
 router.post("/", async (req, res) => {
   try {
-    //1. Extract info from the user input
-    const quiz = await QuizModel.findById(req.params.quizId)
+    //1. Extract question's info from the user input
+    const { quizId, question, correctAnswer, incorrectAnswers} = req.body
+
+    //2. Create new question object
+    //2.1. Check if quiz exists
+    const quiz = await QuizModel.findById(quizId)
     if (quiz) {
-      const newQuestion = new QuestionModel(req.body)
-      const savedQuestion = await newQuestion.save()
-      quiz.questions.push(savedQuestion)
+      //2.2. create a new question object
+      const newQuestion = { quizId, question, correctAnswer, incorrectAnswers }
+      const insertedQuestion = await QuestionModel.create(newQuestion)
+
+      //2.3. add the question into the correct quiz
+      quiz.questions.push(insertedQuestion)
       await quiz.save()
-      res.send(savedQuestion)
+      res.status(201).send(insertedQuestion)
     } else {
-      res.status(404).send({ error: "Quiz not found!" })
+      res.status(404).send({ error: 'Quiz not found' })
     }
-    const newQuestion = new QuestionModel(req.body);
-    const savedQuestion = await newQuestion.save();
-    res.send(savedQuestion);
   } catch (err) {
-    if (err.code === 11000) {
-      res.status(409).send({ error: "Sorry! Question already exists!" })
-    }
-    res.status(500).send({ error: err.message });
-    // res.send({ error: err.message })
+    // if (err.code === 11000) {
+    //   res.status(409).send({ error: "Question already exists!" })
+    // }
+    res.status(500).send({ error: err.message })
   }
 });
 
