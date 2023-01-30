@@ -1,23 +1,32 @@
-import express from "express"
+import express from 'express'
+import mongoose from 'mongoose'
 import QuizModel from "../models/quizModel.js"
 import CategoryModel from "../models/categoryModel.js"
 
 const router = express.Router();
 
+// route to get all quizzes
 router.get("/", async (req, res) => res.send(await QuizModel.find()));
 
+// route to get a quiz by id
 router.get("/:id", async (req, res) => {
-  try {
-    const quiz = await QuizModel.findById(req.params.id);
-    if (quiz) {
-      res.send(quiz);
-    } else {
-      res.status(404).send({ error: "Quiz not found!" });
+
+  //checks of provided id is a mongoose's valid ObjectId (a string of 12 bytes)
+  if (mongoose.isValidObjectId(req.params.id)) {
+    try {
+      const quiz = await QuizModel.findById(req.params.id)
+      if (quiz) {
+        res.send(quiz)
+      } else {
+        res.status(404).send({ error: "Quiz not found!" }) // catch error when Id is valid but does not exist in db
+      }
+    } catch (err) {
+      res.status(500).send({ error: err.message })
     }
-  } catch (err) {
-    res.status(500).send({ error: err.message });
+  } else {
+    res.status(500).send({ error: 'Id is invalid' })
   }
-});
+})
 
 // route to post new quiz
 router.post("/", async (req, res) => {
