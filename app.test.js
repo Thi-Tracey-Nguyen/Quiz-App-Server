@@ -41,29 +41,44 @@ describe('App tests', () => {
       expect(res.body[0].name).toBe('Science')
       expect(res.body[1].name).toBe('TV & Movies')
       expect(res.body[2].name).toBe('Geography')
-    })
-  })
-
-  test('Create a new quiz', async () => {
-    const cats = await request(app).get('/categories')
-    const res = await request(app).post('/quizzes').send({
-      category: 'Science',
-      title: 'Jest Testing 6',
-      author: 'Dev Team',
-      image: 'http://placekitten.com/200/300'
+      })
     })
 
-    expect(res.status).toBe(201)
-    expect(res.headers['content-type']).toMatch(/json/i)
-    expect(res.body._id).toBeDefined()
-    expect(res.body.category).toBeDefined()
-    expect(res.body.title).toBeDefined()
-    expect(res.body.author).toBeDefined()
-    expect(res.body.image).toBeDefined()
-    expect(res.body.category).toBe(cats.body[0]._id)
-    // expect(res.body.title).toBe('Jest Testing')
-    expect(res.body.author).toBe('Dev Team')
-    expect(res.body.image).toBe('http://placekitten.com/200/300')
+  // testing quizzes route
+  describe('Test quizzes route', () => {
+    test('Create a new quiz', async () => {
+      const cats = await request(app).get('/categories')
+      const newQuizTitle = 'Jest Testing'
+      const res = await request(app).post('/quizzes').send({
+        category: 'Science',
+        title: newQuizTitle,
+        author: 'Dev Team',
+        image: 'http://placekitten.com/200/300'
+      })
 
+      expect(res.status).toBe(201)
+      expect(res.headers['content-type']).toMatch(/json/i)
+      expect(res.body._id).toBeDefined()
+      expect(res.body.category).toBeDefined()
+      expect(res.body.title).toBeDefined()
+      expect(res.body.author).toBeDefined()
+      expect(res.body.image).toBeDefined()
+      expect(res.body.category).toBe(cats.body[0]._id)
+      expect(res.body.title).toBe(newQuizTitle)
+      expect(res.body.author).toBe('Dev Team')
+      expect(res.body.image).toBe('http://placekitten.com/200/300')
+    })
+
+    test('Create a quiz with duplicate title', async () => {
+      const newQuizTitle = 'Jest Testing'
+      const res = await request(app).post('/quizzes').send({
+        category: 'Science',
+        title: newQuizTitle,
+        author: 'Dev Team',
+        image: 'http://placekitten.com/200/300'
+      })
+
+      expect(res.status).toBe(500)
+    })
   })
 })
