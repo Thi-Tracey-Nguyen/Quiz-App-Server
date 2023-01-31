@@ -27,9 +27,13 @@ router.post("/", async (req, res) => {
 
     // 2. Create a new quiz object
     // 2.1 Check if the category exists
-    const categoryObject = await CategoryModel.findOne({ _id: category })
+    const categoryObject = await CategoryModel.findOne({ name: category })
     if (categoryObject) {
-      const newQuiz = { category, title, author, image }
+      const newQuiz = { 
+        category: categoryObject._id, 
+        title, 
+        author, 
+        image }
 
       // 2.2. Create a new quiz using newQuiz (sanitised values) 
       const insertedQuiz = await QuizModel.create(newQuiz)
