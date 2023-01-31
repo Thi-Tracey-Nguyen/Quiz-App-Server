@@ -10,9 +10,7 @@ router.get('/:id', async (req, res) => {
   try {
     const cat = await CategoryModel.findById(req.params.id)
     if (cat) {
-      // res.send(cat)
-      const quizzes = await QuizModel.find({ category: req.params.id })
-      res.send(quizzes)
+      res.send(cat)
     } else {
       res.status(404).send({ error: 'Category not found!' })
     }
@@ -30,8 +28,9 @@ router.post('/', async (req, res) => {
   } catch (err) {
     if (err.code === 11000) {
       res.status(409).send({ error: 'Sorry! Category already exists!' })
-  }
+    } else {
      res.status(500).send({ error: err.message })
+    }
   } 
 })
 
@@ -39,7 +38,7 @@ router.delete('/:id', async (req, res) => {
   try {
     const deletedCategory = await CategoryModel.findByIdAndDelete(req.params.id)
     if (deletedCategory) {
-      res.send(deletedCategory)
+      res.sendStatus(204)
     } else {
       res.status(404).send({ error: 'Category not found!' })
     }
@@ -48,21 +47,21 @@ router.delete('/:id', async (req, res) => {
   }
 })
 
-router.patch('/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
+  const { name, image } = req.body
+  const newCategory = { name, image }
+
+
   try {
-    const updatedCategory = await CategoryModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    const updatedCategory = await CategoryModel.findByIdAndUpdate(req.params.id, newCategory, { returnDocument: 'after' })
     if (updatedCategory) {
       res.send(updatedCategory)
     } else {
       res.status(404).send({ error: 'Category not found!' })
     }
   } catch (err) {
-    res.status(400).send({ error: err.message })
+    res.status(500).send({ error: err.message })
   }
 })
-
-
-
-
 
 export default router
