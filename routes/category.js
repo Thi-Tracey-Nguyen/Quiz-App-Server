@@ -51,7 +51,6 @@ router.put('/:id', async (req, res) => {
   const { name, image } = req.body
   const newCategory = { name, image }
 
-
   try {
     const updatedCategory = await CategoryModel.findByIdAndUpdate(req.params.id, newCategory, { returnDocument: 'after' })
     if (updatedCategory) {

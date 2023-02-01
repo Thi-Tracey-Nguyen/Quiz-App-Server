@@ -53,29 +53,70 @@ router.post("/", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const quiz = await QuizModel.findByIdAndDelete(req.params.id);
-    if (!quiz) {
-      res.status(404).send({ error: "Quiz not found!" });
+    if (quiz) {
+      res.sendStatus(204)
     } else {
-      res.send(quiz);
+      res.status(404).send({ error: 'Quiz noy found' });
     }
   } catch (err) {
     res.status(500).send({ error: err.message });
   }
 });
 
-router.patch("/:id", async (req, res) => {
+// edit a quiz
+router.put("/:id", async (req, res) => {
   try {
-    const quiz = await QuizModel.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    if (!quiz) {
-      res.status(404).send({ error: "Quiz not found!" });
-    } else {
-      res.send(quiz);
-    }
-  } catch (err) {
-    res.status(500).send({ error: err.message });
-  }
-});
+    // 1. extract information from the user's input
+    const { category, title, author, image } = req.body
 
-export default router;
+    // 2. Create a new quiz object
+    // 2.1 Get the quiz from id
+    const oldQuiz = await QuizModel.findById(req.params.id)
+
+    // 2.2 if the category is provided, check if it exists
+    if (category) {
+      const categoryObject = await CategoryModel.findOne({ name: category })
+      if (! categoryObject) {
+        res.status(404).send({ error: 'Category not found' })
+      } 
+    // 2.3 if category is not provided, use existing category info
+    } else {
+      const newQuiz = { 
+        category: oldQuiz.category, 
+        title: title || oldQuiz.title, 
+        author: author || oldQuiz.author, 
+        image: image || oldQuiz.image 
+      }
+
+      // 2.2. Edit the existing wuiz with info from newQuiz 
+      const quiz = await QuizModel.findByIdAndUpdate(req.params.id, newQuiz, { returnDocument: 'after' })
+
+      // 2.3. Send back the updated quiz
+      if (quiz) {
+        res.send(quiz)
+      } else {
+        res.status(404).send({ error: 'Quiz not found' })
+      }
+    } 
+  }
+  catch (err) {
+    res.status(500).send({ error: err.message })
+  }
+})
+
+// router.patch("/:id", async (req, res) => {
+//   try {
+//     const quiz = await QuizModel.findByIdAndUpdate(req.params.id, req.body, {
+//       new: true,
+//     });
+//     if (!quiz) {
+//       res.status(404).send({ error: "Quiz not found!" });
+//     } else {
+//       res.send(quiz);
+//     }
+//   } catch (err) {
+//     res.status(500).send({ error: err.message });
+//   }
+// });
+
+export default router
