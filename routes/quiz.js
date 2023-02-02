@@ -42,7 +42,7 @@ router.post("/", async (req, res) => {
       // res.status(201).send(await insertedQuiz.populate({ path: 'category', select: 'name' }))
       res.status(201).send(insertedQuiz)
     } else {
-      res.status(404).send({ error: 'Category not found'})
+      res.status(404).send({ error: 'Category not found' })
     }
   }
   catch (err) {

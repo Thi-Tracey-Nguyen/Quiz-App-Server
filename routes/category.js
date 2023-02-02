@@ -1,6 +1,5 @@
 import express from 'express'
 import CategoryModel from '../models/categoryModel.js'
-import QuizModel from '../models/quizModel.js'
 
 const router = express.Router()
 
