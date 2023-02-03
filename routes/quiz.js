@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
         category: categoryObject._id, 
         title, 
         author, 
-        image }
+        image: 'http://placekitten.com/200/200' }
 
       // 2.2. Create a new quiz using newQuiz (sanitised values) 
       const insertedQuiz = await QuizModel.create(newQuiz)
@@ -85,7 +85,7 @@ router.put("/:id", async (req, res) => {
         category: oldQuiz.category, 
         title: title || oldQuiz.title, 
         author: author || oldQuiz.author, 
-        image: image || oldQuiz.image 
+        image: image || oldQuiz.image
       }
 
       // 2.2. Edit the existing wuiz with info from newQuiz 

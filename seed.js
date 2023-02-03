@@ -13,9 +13,9 @@ console.log('All categories deleted')
 
 // Create categories to seed
 const categoriesArray = [
-    { name: 'Science' },
-    { name: 'TV & Movies' },
-    { name: 'Geography' },
+    { name: 'Science', image: 'http://placekitten.com/200/200' },
+    { name: 'TV & Movies', image: 'http://placekitten.com/200/200' },
+    { name: 'Geography', image: 'http://placekitten.com/200/200' },
 ]
 
 // Insert categories into the database
@@ -23,12 +23,18 @@ const categories = await CategoryModel.insertMany(categoriesArray)
 console.log('All categories seeded successfully')
 
 const quizzesArray = [
-    { category: categories[0], title: 'Random Facts', author: 'Quiz App Staff', questions: [] },
-    { category: categories[0], title: 'Chemistry Facts', author: 'Quiz App Staff', questions: [] },
-    { category: categories[1], title: 'Movie Trivia', author: 'Quiz App Staff', questions: [] },
-    { category: categories[1], title: 'Geeky Shows', author: 'Quiz App Staff', questions: [] },
-    { category: categories[2], title: 'Geography Master', author: 'Quiz App Staff', questions: [] },
-    { category: categories[2], title: 'Rivers & Australia', author: 'Quiz App Staff', questions: [] }
+    { category: categories[0], title: 'Random Facts', author: 'Quiz App Staff'
+        , questions: [], image: 'http://placekitten.com/200/200' },
+    { category: categories[0], title: 'Chemistry Facts', author: 'Quiz App Staff'
+        , questions: [], image: 'http://placekitten.com/200/200' },
+    { category: categories[1], title: 'Movie Trivia', author: 'Quiz App Staff'
+        , questions: [], image: 'http://placekitten.com/200/200' },
+    { category: categories[1], title: 'Geeky Shows', author: 'Quiz App Staff'
+        , questions: [], image: 'http://placekitten.com/200/200' },
+    { category: categories[2], title: 'Geography Master', author: 'Quiz App Staff'
+        , questions: [], image: 'http://placekitten.com/200/200' },
+    { category: categories[2], title: 'Rivers & Australia', author: 'Quiz App Staff'
+        , questions: [], image: 'http://placekitten.com/200/200' }
 ]
 
 // Insert quizzes into the database
