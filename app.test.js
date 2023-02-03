@@ -1,5 +1,15 @@
 import app from './app.js'
 import request from 'supertest'
+// import { dbClose, dbConnect } from './db.js'
+
+// const DATABASE_URI = 'mongodb://localhost:27017/'
+// beforeEach(async () => {
+//   await dbConnect(DATABASE_URI)
+// })
+
+// afterEach(async () => {
+//   await dbClose()
+// })
 
 describe('App tests', () => {
 

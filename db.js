@@ -10,9 +10,9 @@ async function dbClose() {
     console.log('Mongoose disconnected!')
 }
 // Connect to MongoDB via Mongoose
-async function dbConnect() {
+async function dbConnect(databaseURL) {
     try {
-        const m = await mongoose.connect(process.env.ATLAS_DB_URL)
+        const m = await mongoose.connect(databaseURL)
         console.log(m.connection._readyState === 1 ? console.log('Mongoose connected!') : console.log('Mongoose failed to connect'))
     }
     catch (err) {
