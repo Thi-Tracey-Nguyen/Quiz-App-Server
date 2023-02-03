@@ -1,24 +1,33 @@
 import express from 'express'
 import CategoryModel from '../models/categoryModel.js'
+import mongoose from 'mongoose'
+
 
 const router = express.Router()
 
+// route to get all categories
 router.get('/', async (req, res) => res.send(await CategoryModel.find()))
 
+// route to get category by id
 router.get('/:id', async (req, res) => {
-  try {
-    const cat = await CategoryModel.findById(req.params.id)
-    if (cat) {
-      res.send(cat)
-    } else {
-      res.status(404).send({ error: 'Category not found!' })
+  //checks of provided id is a mongoose's valid ObjectId (a string of 12 bytes)
+  if (mongoose.isValidObjectId(req.params.id)) {
+    try {
+      const cat = await CategoryModel.findById(req.params.id)
+      if (cat) {
+        res.send(cat)
+      } else {
+        res.status(404).send({ error: 'Category not found!' }) // catch error when Id is valid but does not exist in db
+      }
+    } catch (err) {
+      console.log({ error: err.message })
     }
-  } 
-  catch (err) {
-    res.status(500).send({ error: err.message })
+  } else {
+    res.status(500).send({ error: 'Invalid Id!' })
   }
 })
 
+//route to create a new category
 router.post('/', async (req, res) => {
   try {
     const newCategory = new CategoryModel(req.body)
@@ -33,6 +42,7 @@ router.post('/', async (req, res) => {
   } 
 })
 
+// route to delete a category
 router.delete('/:id', async (req, res) => {
   try {
     const deletedCategory = await CategoryModel.findByIdAndDelete(req.params.id)
