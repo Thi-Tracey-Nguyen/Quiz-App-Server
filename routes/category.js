@@ -2,6 +2,7 @@ import express from 'express'
 import CategoryModel from '../models/categoryModel.js'
 import mongoose from 'mongoose'
 
+
 const router = express.Router()
 
 // route to get all categories
@@ -35,8 +36,9 @@ router.post('/', async (req, res) => {
   } catch (err) {
     if (err.code === 11000) {
       res.status(409).send({ error: 'Sorry! Category already exists!' })
-  }
+    } else {
      res.status(500).send({ error: err.message })
+    }
   } 
 })
 
@@ -45,7 +47,7 @@ router.delete('/:id', async (req, res) => {
   try {
     const deletedCategory = await CategoryModel.findByIdAndDelete(req.params.id)
     if (deletedCategory) {
-      res.send(deletedCategory)
+      res.sendStatus(204)
     } else {
       res.status(404).send({ error: 'Category not found!' })
     }
@@ -54,19 +56,20 @@ router.delete('/:id', async (req, res) => {
   }
 })
 
-// route to edit a category
-router.patch('/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
+  const { name, image } = req.body
+  const newCategory = { name, image }
+
   try {
-    const updatedCategory = await CategoryModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    const updatedCategory = await CategoryModel.findByIdAndUpdate(req.params.id, newCategory, { returnDocument: 'after' })
     if (updatedCategory) {
       res.send(updatedCategory)
     } else {
       res.status(404).send({ error: 'Category not found!' })
     }
   } catch (err) {
-    res.status(400).send({ error: err.message })
+    res.status(500).send({ error: err.message })
   }
 })
-
 
 export default router

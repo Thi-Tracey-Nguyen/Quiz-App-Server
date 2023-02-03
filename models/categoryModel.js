@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { dbConnect } from '../db.js'
 
-dbConnect()
+dbConnect(process.env.ATLAS_DB_URL)
 const Schema = mongoose.Schema
 
 const categorySchema = new Schema({
