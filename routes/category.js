@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
     res.status(201).send(newCategory)
   } catch (err) {
     if (err.code === 11000) {
-      res.status(409).send({ error: 'Sorry! Category already exists!' })
+      res.status(409).send({ error: 'Category already exists!' })
     } else {
      res.status(500).send({ error: err.message })
     }
