@@ -1,21 +1,30 @@
-import express from "express"
+import express from 'express'
+import mongoose from 'mongoose'
 import QuizModel from "../models/quizModel.js"
 import CategoryModel from "../models/categoryModel.js"
 
 const router = express.Router();
 
+
 router.get("/", async (req, res) => res.send(await QuizModel.find()))
 
+// route to get a quiz by id
 router.get("/:id", async (req, res) => {
-  try {
-    const quiz = await QuizModel.findById(req.params.id)
-    if (quiz) {
-      res.send(quiz);
-    } else {
-      res.status(404).send({ error: "Quiz not found!" })
+
+  //checks of provided id is a mongoose's valid ObjectId (a string of 12 bytes)
+  if (mongoose.isValidObjectId(req.params.id)) {
+    try {
+      const quiz = await QuizModel.findById(req.params.id)
+      if (quiz) {
+        res.send(quiz)
+      } else {
+        res.status(404).send({ error: "Quiz not found!" }) // catch error when Id is valid but does not exist in db
+      }
+    } catch (err) {
+      res.status(500).send({ error: err.message })
     }
-  } catch (err) {
-    res.status(500).send({ error: err.message })
+  } else {
+    res.status(500).send({ error: 'Id is invalid' })
   }
 })
 
@@ -85,7 +94,7 @@ router.put("/:id", async (req, res) => {
         category: oldQuiz.category, 
         title: title || oldQuiz.title, 
         author: author || oldQuiz.author, 
-        image: image || oldQuiz.image 
+        image: image || oldQuiz.image
       }
 
       // 2.2. Edit the existing wuiz with info from newQuiz 

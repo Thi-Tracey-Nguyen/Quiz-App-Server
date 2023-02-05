@@ -61,21 +61,47 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.patch("/:id", async (req, res) => {
-  try {
-    const question = await QuestionModel.findById(req.params.id);
-    if (question) {
-      Object.keys(req.body).forEach((key) => {
-        question[key] = req.body[key];
-      });
-      await question.save();
-      res.send(question);
-    } else {
-      res.status(404).send({ error: "Question not found!" });
+// router.patch("/:id", async (req, res) => {
+//   try {
+//     const question = await QuestionModel.findById(req.params.id);
+//     if (question) {
+//       Object.keys(req.body).forEach((key) => {
+//         question[key] = req.body[key];
+//       });
+//       await question.save();
+//       res.send(question);
+//     } else {
+//       res.status(404).send({ error: "Question not found!" });
+//     }
+//   } catch (err) {
+//     res.status(400).send({ error: err.message });
+//   }
+// });
+
+router.put('/:id', async (req, res) => {
+
+  const existingQuestion = await QuestionModel.findById(req.params.id)
+
+  if (existingQuestion) {
+
+    const { question, correctAnswer, incorrectAnswers } = req.body
+
+    const newQuestion = {
+      question: question,
+      correctAnswer: correctAnswer, 
+      incorrectAnswers: incorrectAnswers
     }
-  } catch (err) {
-    res.status(400).send({ error: err.message });
+
+    try {
+      const updatedQuestion = await QuestionModel.findByIdAndUpdate(req.params.id, newQuestion, { returnDocument: 'after' })
+      res.send(updatedQuestion)
+    } catch (err) {
+      res.status(500).send({ error: err.message })
+    }
   }
-});
+  else {
+    res.status(404).send({ error: 'Question not found' })
+  }
+})
 
 export default router;

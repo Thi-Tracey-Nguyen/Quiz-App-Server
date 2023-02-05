@@ -13,9 +13,9 @@ console.log('All categories deleted')
 
 // Create categories to seed
 const categoriesArray = [
-    { name: 'Science' },
-    { name: 'TV & Movies' },
-    { name: 'Geography' },
+    { name: 'Science', image: 'http://placekitten.com/200/200' },
+    { name: 'TV & Movies', image: 'http://placekitten.com/200/200' },
+    { name: 'Geography', image: 'http://placekitten.com/200/200' },
 ]
 
 // Insert categories into the database
