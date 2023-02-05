@@ -52,12 +52,12 @@ router.delete("/:id", async (req, res) => {
   try {
     const question = await QuestionModel.findByIdAndDelete(req.params.id);
     if (question) {
-      res.send(question);
+      res.sendStatus(204)
     } else {
-      res.status(404).send({ error: "Question not found!" });
+      res.status(404).send({ error: "Question not found!" })
     }
   } catch (err) {
-    res.status(500).send({ error: err.message });
+    res.status(500).send({ error: err.message })
   }
 });
 
