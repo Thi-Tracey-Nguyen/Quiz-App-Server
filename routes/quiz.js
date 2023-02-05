@@ -4,20 +4,20 @@ import CategoryModel from "../models/categoryModel.js"
 
 const router = express.Router();
 
-router.get("/", async (req, res) => res.send(await QuizModel.find()));
+router.get("/", async (req, res) => res.send(await QuizModel.find()))
 
 router.get("/:id", async (req, res) => {
   try {
-    const quiz = await QuizModel.findById(req.params.id);
+    const quiz = await QuizModel.findById(req.params.id)
     if (quiz) {
       res.send(quiz);
     } else {
-      res.status(404).send({ error: "Quiz not found!" });
+      res.status(404).send({ error: "Quiz not found!" })
     }
   } catch (err) {
-    res.status(500).send({ error: err.message });
+    res.status(500).send({ error: err.message })
   }
-});
+})
 
 // route to post new quiz
 router.post("/", async (req, res) => {
@@ -61,7 +61,7 @@ router.delete("/:id", async (req, res) => {
   } catch (err) {
     res.status(500).send({ error: err.message });
   }
-});
+})
 
 // edit a quiz
 router.put("/:id", async (req, res) => {
