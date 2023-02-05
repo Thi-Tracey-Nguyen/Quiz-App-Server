@@ -50,8 +50,12 @@ router.post("/", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
-    const question = await QuestionModel.findByIdAndDelete(req.params.id);
+    const question = await QuestionModel.findByIdAndDelete(req.params.id)
     if (question) {
+      const quiz = await QuizModel.findById(question.quizId)
+      const index = quiz.questions.indexOf(question._id)
+      const removedQuestion = quiz.questions.splice(index, 1)
+      await quiz.save()
       res.sendStatus(204)
     } else {
       res.status(404).send({ error: "Question not found!" })

@@ -65,10 +65,10 @@ router.delete("/:id", async (req, res) => {
     if (quiz) {
       res.sendStatus(204)
     } else {
-      res.status(404).send({ error: 'Quiz noy found' });
+      res.status(404).send({ error: 'Quiz not found' })
     }
   } catch (err) {
-    res.status(500).send({ error: err.message });
+    res.status(500).send({ error: err.message })
   }
 })
 
