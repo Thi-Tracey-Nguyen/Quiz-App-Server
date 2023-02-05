@@ -14,7 +14,7 @@ router.get("/:id", async (req, res) => {
   //checks of provided id is a mongoose's valid ObjectId (a string of 12 bytes)
   if (mongoose.isValidObjectId(req.params.id)) {
     try {
-      const quiz = await QuizModel.findById(req.params.id)
+      const quiz = await QuizModel.findById(req.params.id).populate({ path: 'questions'})
       if (quiz) {
         res.send(quiz)
       } else {
