@@ -5,8 +5,8 @@ import CategoryModel from "../models/categoryModel.js"
 
 const router = express.Router();
 
-// route to get all quizzes
-router.get("/", async (req, res) => res.send(await QuizModel.find()));
+
+router.get("/", async (req, res) => res.send(await QuizModel.find()))
 
 // route to get a quiz by id
 router.get("/:id", async (req, res) => {
@@ -42,7 +42,7 @@ router.post("/", async (req, res) => {
         category: categoryObject._id, 
         title, 
         author, 
-        image: 'http://placekitten.com/200/200' }
+        image: './assets/icon.png' }
 
       // 2.2. Create a new quiz using newQuiz (sanitised values) 
       const insertedQuiz = await QuizModel.create(newQuiz)
@@ -70,7 +70,7 @@ router.delete("/:id", async (req, res) => {
   } catch (err) {
     res.status(500).send({ error: err.message });
   }
-});
+})
 
 // edit a quiz
 router.put("/:id", async (req, res) => {

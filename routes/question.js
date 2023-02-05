@@ -33,8 +33,8 @@ router.post("/", async (req, res) => {
       const newQuestion = { quizId, question, correctAnswer, incorrectAnswers }
       const insertedQuestion = await QuestionModel.create(newQuestion)
 
-      //2.3. add the question into the correct quiz
-      quiz.questions.push(insertedQuestion)
+      //2.3. add the question id into the correct quiz
+      quiz.questions.push(insertedQuestion._id)
       await quiz.save()
       res.status(201).send(insertedQuestion)
     } else {
