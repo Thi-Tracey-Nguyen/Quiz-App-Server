@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
         category: categoryObject._id, 
         title, 
         author, 
-        image }
+        image: './assets/icon.png' }
 
       // 2.2. Create a new quiz using newQuiz (sanitised values) 
       const insertedQuiz = await QuizModel.create(newQuiz)

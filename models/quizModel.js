@@ -19,11 +19,12 @@ const quizSchema = new Schema({
     },
     questions: {
         type: Array,
+        ref: 'Question',
         required: true 
     },
     image: {    
         type: String,
-        required: false
+        required: true
     }
 })
 

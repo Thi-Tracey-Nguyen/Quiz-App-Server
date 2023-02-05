@@ -23,12 +23,12 @@ const categories = await CategoryModel.insertMany(categoriesArray)
 console.log('All categories seeded successfully')
 
 const quizzesArray = [
-    { category: categories[0], title: 'Random Facts', author: 'Quiz App Staff', questions: [] },
-    { category: categories[0], title: 'Chemistry Facts', author: 'Quiz App Staff', questions: [] },
-    { category: categories[1], title: 'Movie Trivia', author: 'Quiz App Staff', questions: [] },
-    { category: categories[1], title: 'Geeky Shows', author: 'Quiz App Staff', questions: [] },
-    { category: categories[2], title: 'Geography Master', author: 'Quiz App Staff', questions: [] },
-    { category: categories[2], title: 'Rivers & Australia', author: 'Quiz App Staff', questions: [] }
+    { category: categories[0], title: 'Random Facts', author: 'Quiz App Staff', questions: [], image: './assets/icon.png' },
+    { category: categories[0], title: 'Chemistry Facts', author: 'Quiz App Staff', questions: [], image: './assets/icon.png' },
+    { category: categories[1], title: 'Movie Trivia', author: 'Quiz App Staff', questions: [], image: './assets/icon.png' },
+    { category: categories[1], title: 'Geeky Shows', author: 'Quiz App Staff', questions: [], image: './assets/icon.png' },
+    { category: categories[2], title: 'Geography Master', author: 'Quiz App Staff', questions: [], image: './assets/icon.png' },
+    { category: categories[2], title: 'Rivers & Australia', author: 'Quiz App Staff', questions: [], image: './assets/icon.png' }
 ]
 
 // Insert quizzes into the database
