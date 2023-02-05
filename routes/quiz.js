@@ -42,7 +42,8 @@ router.post("/", async (req, res) => {
         category: categoryObject._id, 
         title, 
         author, 
-        image: './assets/icon.png' }
+        image 
+      }
 
       // 2.2. Create a new quiz using newQuiz (sanitised values) 
       const insertedQuiz = await QuizModel.create(newQuiz)
