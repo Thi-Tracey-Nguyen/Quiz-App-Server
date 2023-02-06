@@ -1,14 +1,14 @@
-import express from "express";
-import QuestionModel from "../models/questionModel.js";
-import QuizModel from "../models/quizModel.js";
+import express from "express"
+import QuestionModel from "../models/questionModel.js"
+import QuizModel from "../models/quizModel.js"
 
 const router = express.Router();
 
-router.get("/", async (req, res) => res.send(await QuestionModel.find()));
+router.get("/", async (req, res) => res.send(await QuestionModel.find()))
 
 router.get("/:id", async (req, res) => {
   try {
-    const question = await QuestionModel.findById(req.params.id);
+    const question = await QuestionModel.findById(req.params.id)
     if (question) {      
       res.send(question);
     } else {
