@@ -13,9 +13,9 @@ console.log('All categories deleted')
 
 // Create categories to seed
 const categoriesArray = [
-    { name: 'Science', image: 'http://placekitten.com/200/200' },
-    { name: 'TV & Movies', image: 'http://placekitten.com/200/200' },
-    { name: 'Geography', image: 'http://placekitten.com/200/200' },
+    { name: 'Science' },
+    { name: 'TV & Movies' },
+    { name: 'Geography' },
 ]
 
 // Insert categories into the database
@@ -23,12 +23,12 @@ const categories = await CategoryModel.insertMany(categoriesArray)
 console.log('All categories seeded successfully')
 
 const quizzesArray = [
-    { category: categories[0], title: 'Random Facts', author: 'Quiz App Staff', questions: [], image: 'src/assets/question-mark.png' },
-    { category: categories[0], title: 'Chemistry Facts', author: 'Quiz App Staff', questions: [], image: 'src/assets/maths.png' },
-    { category: categories[1], title: 'Movie Trivia', author: 'Quiz App Staff', questions: [], image: 'src/assets/movies.png' },
-    { category: categories[1], title: 'Geeky TV Shows', author: 'Quiz App Staff', questions: [], image: 'src/assets/tv.png' },
-    { category: categories[2], title: 'Geography Master', author: 'Quiz App Staff', questions: [], image: 'src/assets/geography.png' },
-    { category: categories[2], title: 'Rivers & Australia', author: 'Quiz App Staff', questions: [], image: 'src/assets/nature.png' }
+    { category: categories[0], title: 'Random Facts', author: 'Quiz App Staff', questions: [], image: '/question-mark.png' },
+    { category: categories[0], title: 'Chemistry Facts', author: 'Quiz App Staff', questions: [], image: '/maths.png' },
+    { category: categories[1], title: 'Movie Trivia', author: 'Quiz App Staff', questions: [], image: '/movies.png' },
+    { category: categories[1], title: 'Geeky TV Shows', author: 'Quiz App Staff', questions: [], image: '/tv.png' },
+    { category: categories[2], title: 'Geography Master', author: 'Quiz App Staff', questions: [], image: '/geography.png' },
+    { category: categories[2], title: 'Rivers & Australia', author: 'Quiz App Staff', questions: [], image: '/nature.png' }
 ]
 
 // Insert quizzes into the database
