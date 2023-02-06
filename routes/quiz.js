@@ -84,33 +84,30 @@ router.put("/:id", async (req, res) => {
     // 2. Create a new quiz object
     // 2.1 Get the quiz from id
     const oldQuiz = await QuizModel.findById(req.params.id)
-
+    
     // 2.2 if the category is provided, check if it exists
-    if (category) {
-      const categoryObject = await CategoryModel.findOne({ name: category })
-      if (! categoryObject) {
-        res.status(404).send({ error: 'Category not found' })
-      } 
+    const categoryObject = await CategoryModel.findOne({ name: req.body.category })
+    if (! categoryObject) {
+      res.status(404).send({ error: 'Category not found' })
+    }
     // 2.3 if category is not provided, use existing category info
+    const newQuiz = { 
+      category: categoryObject._id || oldQuiz.category, 
+      title: title || oldQuiz.title, 
+      author: author || oldQuiz.author, 
+      image: image || oldQuiz.image
+    }
+    console.log(newQuiz)
+    // 2.4. Edit the existing wuiz with info from newQuiz 
+    const quiz = await QuizModel.findByIdAndUpdate(req.params.id, newQuiz, { returnDocument: 'after' })
+
+    //2.5. Send back the updated quiz
+    if (quiz) {
+      res.send(quiz)
     } else {
-      const newQuiz = { 
-        category: oldQuiz.category, 
-        title: title || oldQuiz.title, 
-        author: author || oldQuiz.author, 
-        image: image || oldQuiz.image
-      }
-
-      // 2.2. Edit the existing wuiz with info from newQuiz 
-      const quiz = await QuizModel.findByIdAndUpdate(req.params.id, newQuiz, { returnDocument: 'after' })
-
-      // 2.3. Send back the updated quiz
-      if (quiz) {
-        res.send(quiz)
-      } else {
-        res.status(404).send({ error: 'Quiz not found' })
-      }
-    } 
-  }
+      res.status(404).send({ error: 'Quiz not found' })
+    }
+  } 
   catch (err) {
     res.status(500).send({ error: err.message })
   }
