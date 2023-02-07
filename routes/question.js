@@ -49,10 +49,11 @@ router.post("/", QuestionValidation(), async (req, res) => {
       res.status(404).send({ error: 'Quiz not found' })
     }
   } catch (err) {
-    // if (err.code === 11000) {
-    //   res.status(409).send({ error: "Question already exists!" })
-    // }
+    if (err.code === 11000) {
+      res.status(409).send({ errors: [ {msg: 'Question already exists in this quiz'} ] })
+    } else {
     res.status(500).send({ errors: [ {msg: err.message}, ] })
+    }
   }
 })
 
