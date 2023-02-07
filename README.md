@@ -12,7 +12,7 @@
 
 ## Application and Project Repositories
 
-- [Deployed site - Netlify](https://precious-babka-f45b14.netlify.app/)
+- [Deployed site - Netlify](https://the-mern-quiz-app.netlify.app)
 - [Planning Documentation](https://github.com/MERN-Quiz-App/Quiz-App-Docs)
 - [Client repository - React App](https://github.com/MERN-Quiz-App/Quiz-App-Client)
 - [Server repository - Express App](https://github.com/MERN-Quiz-App/Quiz-App-Server)
