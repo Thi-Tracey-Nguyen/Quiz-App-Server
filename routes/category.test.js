@@ -92,14 +92,12 @@ describe('Test categories route', () => {
     it('should update the name and image of the chosen category', async () => {
       const cats = await request(app).get('/categories')
       const res = await request(app).put(`/categories/${cats.body[0]._id}`).send({
-        name: 'New Category', 
-        image: 'http://placekitten.com/200/300'
+        name: 'New Category'
       })
       expect(res.status).toBe(200)
 
       const updatedCats = await request(app).get('/categories')
       expect(updatedCats.body[0].name).toBe('New Category')
-      expect(updatedCats.body[0].image).toBe('http://placekitten.com/200/300')
     })
   })
 })

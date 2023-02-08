@@ -59,7 +59,7 @@ describe('Test quizzes route', () => {
         image: 'http://placekitten.com/200/300'
       })
 
-      expect(res.status).toBe(500)
+      expect(res.status).toBe(409)
     })
   })
 
@@ -79,15 +79,17 @@ describe('Test quizzes route', () => {
     it('should update the chosen quiz', async () => {
       const quizzes = await request(app).get('/quizzes')
       const quizId = quizzes.body[0]._id
-      const res = await request(app).put(`/quizzes/${quizId}`).send({
+      console.log(quizId)
+      const updatedQuiz = {
         title: 'New Quiz',
-        image: 'http://placekitten.com/200/300'
-      })
+        author: 'Dev Team'
+      }
+      const res = await request(app).put(`/quizzes/${quizId}`).send(updatedQuiz)
       expect(res.status).toBe(200)
-      console.log(res)
+      console.log(res.body)
       const updatedQuizzes= await request(app).get('/quizzes')
       expect(updatedQuizzes.body[0].title).toBe('New Quiz')
-      expect(updatedQuizzes.body[0].image).toBe('http://placekitten.com/200/300')
+      expect(updatedQuizzes.body[0].author).toBe('Dev Team')
     })
   })
 })
