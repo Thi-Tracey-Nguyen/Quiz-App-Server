@@ -83,30 +83,29 @@ router.delete("/:id", async (req, res) => {
   }
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', questionValidation(), async (req, res) => {
 
-  const existingQuestion = await QuestionModel.findById(req.params.id)
-
-  if (existingQuestion) {
-
-    const { question, correctAnswer, incorrectAnswers } = req.body
-
-    const newQuestion = {
-      question: question,
-      correctAnswer: correctAnswer, 
-      incorrectAnswers: incorrectAnswers
-    }
-
-    try {
-      const updatedQuestion = await QuestionModel.findByIdAndUpdate(req.params.id, newQuestion, { returnDocument: 'after' })
-      res.send(updatedQuestion)
-    } catch (err) {
-      res.status(500).send({ error: err.message })
-    }
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() })
   }
-  else {
-    res.status(404).send({ error: 'Question not found' })
+
+
+  const { question, correctAnswer, incorrectAnswers } = req.body
+
+  const newQuestion = {
+    question: question,
+    correctAnswer: correctAnswer, 
+    incorrectAnswers: incorrectAnswers
   }
-})
+
+  try {
+    const updatedQuestion = await QuestionModel.findByIdAndUpdate(req.params.id, newQuestion, { returnDocument: 'after' })
+    res.send(updatedQuestion)
+  } catch (err) {
+    res.status(500).send({ error: err.message })
+  }
+  }
+)
 
 export default router

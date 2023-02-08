@@ -127,19 +127,5 @@ router.put("/:id", async (req, res) => {
   }
 })
 
-// router.patch("/:id", async (req, res) => {
-//   try {
-//     const quiz = await QuizModel.findByIdAndUpdate(req.params.id, req.body, {
-//       new: true,
-//     });
-//     if (!quiz) {
-//       res.status(404).send({ error: "Quiz not found!" });
-//     } else {
-//       res.send(quiz);
-//     }
-//   } catch (err) {
-//     res.status(500).send({ error: err.message });
-//   }
-// });
 
 export default router
