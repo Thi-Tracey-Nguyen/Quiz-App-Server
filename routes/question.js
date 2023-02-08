@@ -90,16 +90,14 @@ router.put('/:id', questionValidation(), async (req, res) => {
     return res.status(400).json({ errors: errors.array() })
   }
 
-
-  const { question, correctAnswer, incorrectAnswers } = req.body
-
-  const newQuestion = {
-    question: question,
-    correctAnswer: correctAnswer, 
-    incorrectAnswers: incorrectAnswers
-  }
-
   try {
+    const { question, correctAnswer, incorrectAnswers } = req.body
+
+    const newQuestion = {
+      question: question,
+      correctAnswer: correctAnswer, 
+      incorrectAnswers: incorrectAnswers
+    }
     const updatedQuestion = await QuestionModel.findByIdAndUpdate(req.params.id, newQuestion, { returnDocument: 'after' })
     res.send(updatedQuestion)
   } catch (err) {
