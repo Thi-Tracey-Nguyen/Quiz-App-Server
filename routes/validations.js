@@ -45,4 +45,14 @@ function quizValidation() {
   ]
 }
 
-export { questionValidation, quizValidation }
+function categoryValidation() {
+  return [
+    body('name')
+      .exists()
+      .withMessage('Please provide a title')
+      .isLength({ min: 4 })
+      .withMessage('Title must be at least 4 characters'),
+  ]
+}
+
+export { questionValidation, quizValidation, categoryValidation }
