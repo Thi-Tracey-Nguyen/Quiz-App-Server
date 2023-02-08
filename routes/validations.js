@@ -1,13 +1,13 @@
 import express from 'express'
-import { body, validationResult } from 'express-validator'
+import { body } from 'express-validator'
 
-export default function QuestionValidation() {
+function questionValidation() {
   return [
     body('question')
       .exists()
       .withMessage('Please provide a question')
-      .isLength({ min: 4 })
-      .withMessage('Question too short'),
+      .isLength({ min: 5 })
+      .withMessage('Question must be longer than 5 characters'),
     body('correctAnswer')
       .exists()
       .withMessage('Please provide a correct answer'),
@@ -25,3 +25,24 @@ export default function QuestionValidation() {
       })
   ]
 }
+
+function quizValidation() {
+  return [
+    body('title')
+      .exists()
+      .withMessage('Please provide a title')
+      .isLength({ min: 4 })
+      .withMessage('Title must be at least 4 characters'),
+    body('author')
+      .exists()
+      .withMessage("Please provide an author's name"),
+    body('category')
+      .exists()
+      .withMessage('Please choose a category'),
+    body('image')
+      .exists()
+      .withMessage('Please select an image')
+  ]
+}
+
+export { questionValidation, quizValidation }

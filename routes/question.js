@@ -2,7 +2,7 @@ import express, { request } from "express"
 import { validationResult } from "express-validator"
 import QuestionModel from "../models/questionModel.js"
 import QuizModel from "../models/quizModel.js"
-import QuestionValidation from "./validations.js"
+import { questionValidation } from "./validations.js"
 
 const router = express.Router();
 
@@ -22,7 +22,7 @@ router.get("/:id", async (req, res) => {
 })
 
 // route to post new questions
-router.post("/", QuestionValidation(), async (req, res) => {
+router.post("/", questionValidation(), async (req, res) => {
 
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
@@ -52,7 +52,7 @@ router.post("/", QuestionValidation(), async (req, res) => {
     if (err.code === 11000) {
       res.status(409).send({ errors: [ {msg: 'Question already exists in this quiz'} ] })
     } else {
-    res.status(500).send({ errors: [ {msg: err.message}, ] })
+      res.status(500).send({ errors: [ {msg: err.message}, ] })
     }
   }
 })
