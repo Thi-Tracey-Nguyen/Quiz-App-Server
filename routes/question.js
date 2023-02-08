@@ -1,6 +1,8 @@
-import express from "express"
+import express, { request } from "express"
+import { validationResult } from "express-validator"
 import QuestionModel from "../models/questionModel.js"
 import QuizModel from "../models/quizModel.js"
+import QuestionValidation from "./validations.js"
 
 const router = express.Router();
 
@@ -10,17 +12,23 @@ router.get("/:id", async (req, res) => {
   try {
     const question = await QuestionModel.findById(req.params.id)
     if (question) {      
-      res.send(question);
+      res.send(question)
     } else {
-      res.status(404).send({ error: "Question not found!" });
+      res.status(404).send({ error: "Question not found!" })
     }
   } catch (err) {
-    res.status(500).send({ error: err.message });
+    res.status(500).send({ error: err.message })
   }
-});
+})
 
 // route to post new questions
-router.post("/", async (req, res) => {
+router.post("/", QuestionValidation(), async (req, res) => {
+
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() })
+  }
+
   try {
     //1. Extract question's info from the user input
     const { quizId, question, correctAnswer, incorrectAnswers} = req.body
@@ -48,9 +56,14 @@ router.post("/", async (req, res) => {
     }
     }
   } catch (err) {
-    res.status(500).send({ error: err.message })
+    if (err.code === 11000) {
+      res.status(409).send({ errors: [ {msg: 'Question already exists in this quiz'} ] })
+    } else {
+    res.status(500).send({ errors: [ {msg: err.message}, ] })
+    }
   }
 })
+
 
 router.delete("/:id", async (req, res) => {
   try {
@@ -67,24 +80,7 @@ router.delete("/:id", async (req, res) => {
   } catch (err) {
     res.status(500).send({ error: err.message })
   }
-});
-
-// router.patch("/:id", async (req, res) => {
-//   try {
-//     const question = await QuestionModel.findById(req.params.id);
-//     if (question) {
-//       Object.keys(req.body).forEach((key) => {
-//         question[key] = req.body[key];
-//       });
-//       await question.save();
-//       res.send(question);
-//     } else {
-//       res.status(404).send({ error: "Question not found!" });
-//     }
-//   } catch (err) {
-//     res.status(400).send({ error: err.message });
-//   }
-// });
+})
 
 router.put('/:id', async (req, res) => {
 
@@ -112,4 +108,4 @@ router.put('/:id', async (req, res) => {
   }
 })
 
-export default router;
+export default router
