@@ -41,9 +41,11 @@ describe('Test questions route', () => {
       expect(res.body.question).toBe("What is 2 + 2?")
       expect(res.body.correctAnswer).toBe("4")
       expect(res.body.incorrectAnswers[0]).toBe("6")
+      expect(res.body.incorrectAnswers[1]).toBe("12")
+      expect(res.body.incorrectAnswers[2]).toBe("8")
     })
 
-    it('should not create a question with duplicated title with the same quizId', async () => {
+    it('should send 409 status when posting a duplicated title with the same quizId', async () => {
       const quizzes = await request(app).get('/quizzes')
       const res = await request(app).post('/questions').send({
         quizId: quizzes.body[0]._id,
@@ -52,7 +54,7 @@ describe('Test questions route', () => {
         incorrectAnswers: ["6", "12", "8"]
       })
 
-      expect(res.status).toBe(500)
+      expect(res.status).toBe(409)
     })
   })
 
@@ -68,19 +70,23 @@ describe('Test questions route', () => {
     })
   })
 
-  // describe('Editing a quiz', () => {
-  //   it('should update the chosen quiz', async () => {
-  //     const questions = await request(app).get('/questions')
-  //     const quizId = questions.body[0]._id
-  //     const res = await request(app).put(`/questions/${quizId}`).send({
-  //       title: 'New Quiz',
-  //       image: 'http://placekitten.com/200/300'
-  //     })
-  //     expect(res.status).toBe(200)
-  //     console.log(res)
-  //     const updatedquestions= await request(app).get('/questions')
-  //     expect(updatedquestions.body[0].title).toBe('New Quiz')
-  //     expect(updatedquestions.body[0].image).toBe('http://placekitten.com/200/300')
-  //   })
-  // })
+  describe('Editing a question', () => {
+    it('should update the chosen question', async () => {
+      const questions = await request(app).get('/questions')
+      const questionId = questions.body[0]._id
+      const res = await request(app).put(`/questions/${questionId}`).send({
+        question: 'Jest Testing is ...?',
+        correctAnswer: 'All of the options are correct', 
+        incorrectAnswers: ['Amazing', 'Great', 'Fantastic']
+      })
+      expect(res.status).toBe(200)
+
+      const updatedquestions= await request(app).get('/questions')
+      expect(updatedquestions.body[0].question).toBe('Jest Testing is ...?')
+      expect(updatedquestions.body[0].correctAnswer).toBe('All of the options are correct')
+      expect(updatedquestions.body[0].incorrectAnswers[0]).toBe('Amazing')
+      expect(updatedquestions.body[0].incorrectAnswers[1]).toBe('Great')
+      expect(updatedquestions.body[0].incorrectAnswers[2]).toBe('Fantastic')
+    })
+  })
 })
