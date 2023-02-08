@@ -2,8 +2,10 @@ import express from 'express'
 import mongoose from 'mongoose'
 import QuizModel from "../models/quizModel.js"
 import CategoryModel from "../models/categoryModel.js"
+import { quizValidation } from './validations.js'
+import { validationResult } from 'express-validator'
 
-const router = express.Router();
+const router = express.Router()
 
 
 router.get("/", async (req, res) => res.send(await QuizModel.find()))
@@ -31,7 +33,13 @@ router.get("/:id", async (req, res) => {
 })
 
 // route to post new quiz
-router.post("/", async (req, res) => {
+router.post("/", quizValidation(), async (req, res) => {
+
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() })
+  }
+
   try {
     // 1. extract information from the user's input
     const { category, title, author, image } = req.body
@@ -51,14 +59,17 @@ router.post("/", async (req, res) => {
       const insertedQuiz = await QuizModel.create(newQuiz)
 
       // 2.3. Send back the new quiz with 201 status
-      // res.status(201).send(await insertedQuiz.populate({ path: 'category', select: 'name' }))
       res.status(201).send(insertedQuiz)
     } else {
       res.status(404).send({ error: 'Category not found' })
     }
   }
   catch (err) {
-    res.status(500).send({ error: err.message })
+    if (err.code === 11000) {
+      res.status(409).send({ errors: [ {msg: 'Quiz already exists. Please choose a different name.'} ] })
+    } else {
+      res.status(500).send({ errors: [ {msg: err.message}, ] })
+    }
   }
 })
 
@@ -97,7 +108,6 @@ router.put("/:id", async (req, res) => {
       author: author || oldQuiz.author, 
       image: image || oldQuiz.image
     }
-    console.log(newQuiz)
     // 2.4. Edit the existing wuiz with info from newQuiz 
     const quiz = await QuizModel.findByIdAndUpdate(req.params.id, newQuiz, { returnDocument: 'after' })
 

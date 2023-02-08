@@ -1,6 +1,8 @@
 import express from 'express'
 import CategoryModel from '../models/categoryModel.js'
 import mongoose from 'mongoose'
+import { categoryValidation } from './validations.js'
+import { validationResult } from 'express-validator'
 
 
 const router = express.Router()
@@ -27,17 +29,23 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-//route to create a new category
-router.post('/', async (req, res) => {
+//route to create a new category with validation
+router.post('/', categoryValidation(), async (req, res) => {
+
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() })
+  }
+
   try {
     const newCategory = new CategoryModel(req.body)
     await newCategory.save()
     res.status(201).send(newCategory)
   } catch (err) {
     if (err.code === 11000) {
-      res.status(409).send({ error: 'Category already exists!' })
+      res.status(409).send({ errors: [ {msg: 'Category already exists. Please choose a different name.'} ] })
     } else {
-     res.status(500).send({ error: err.message })
+      res.status(500).send({ errors: [ {msg: err.message}, ] })
     }
   } 
 })
