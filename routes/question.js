@@ -33,20 +33,27 @@ router.post("/", QuestionValidation(), async (req, res) => {
     //1. Extract question's info from the user input
     const { quizId, question, correctAnswer, incorrectAnswers} = req.body
 
-    //2. Create new question object
-    //2.1. Check if quiz exists
-    const quiz = await QuizModel.findById(quizId)
-    if (quiz) {
-      //2.2. create a new question object
-      const newQuestion = { quizId, question, correctAnswer, incorrectAnswers }
-      const insertedQuestion = await QuestionModel.create(newQuestion)
-
-      //2.3. add the question id into the correct quiz
-      quiz.questions.push(insertedQuestion._id)
-      await quiz.save()
-      res.status(201).send(insertedQuestion)
+    // Checks if the array length is equal to 3
+    if (!incorrectAnswers) {
+      res.send({ error: 'Please provide 3 incorrect answers' })
+    } else if (incorrectAnswers && incorrectAnswers.length !== 3){
+      res.send({ error: 'Please provide 3 incorrect answers' })
     } else {
-      res.status(404).send({ error: 'Quiz not found' })
+      //2. Create new question object
+      //2.1. Check if quiz exists
+      const quiz = await QuizModel.findById(quizId)
+      if (quiz) {
+        //2.2. create a new question object
+        const newQuestion = { quizId, question, correctAnswer, incorrectAnswers }
+        const insertedQuestion = await QuestionModel.create(newQuestion)
+
+        //2.3. add the question id into the correct quiz
+        quiz.questions.push(insertedQuestion._id)
+        await quiz.save()
+        res.status(201).send(insertedQuestion)
+      } else {
+        res.status(404).send({ error: 'Quiz not found' })
+    }
     }
   } catch (err) {
     if (err.code === 11000) {
@@ -56,7 +63,6 @@ router.post("/", QuestionValidation(), async (req, res) => {
     }
   }
 })
-
 
 
 router.delete("/:id", async (req, res) => {
