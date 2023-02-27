@@ -20,6 +20,5 @@ async function dbConnect(databaseURL) {
     }
 }
 
-
 export { dbClose, dbConnect }
 
