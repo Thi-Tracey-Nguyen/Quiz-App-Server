@@ -8,7 +8,6 @@ import User from '../models/userModel.js'
 
 const router = express.Router()
 
-
 // routes
 // router.get('/', (req, res) => {
 //   const user = req.user || { name: 'Guest' }
@@ -27,14 +26,19 @@ router.get('/login', checkNotAuthenticated, (req, res) => {
 
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user) => {
-    if (err) throw err;
-    if (!user) res.json({ message: 'Username or password incorrect' });
+    if (err) throw err
+    if (!user) res.json({ message: 'Username or password incorrect' })
     else {
       req.logIn(user, (err) => {
-        if (err) throw err;
-        res.send("Successfully Authenticated");
-        console.log(req.user);
-      });
+        if (err) throw err
+        res.send(user)
+
+        //send session info back 
+        const session = req.session
+        session.isAuthenticated = true
+        res.send(req.session._id)
+      })
+      
     }
 })
   (req, res, next)
@@ -42,20 +46,20 @@ router.post("/login", (req, res, next) => {
 
 router.post("/register", (req, res) => {
   User.findOne({ username: req.body.username }, async (err, doc) => {
-    if (err) throw err;
-    if (doc) res.send("User Already Exists");
+    if (err) throw err
+    if (doc) res.status(409).json({ message: "User Already Exists" })
     if (!doc) {
-      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      const hashedPassword = await bcrypt.hash(req.body.password, 10)
 
       const newUser = new User({
         username: req.body.username,
         password: hashedPassword,
       });
       await newUser.save();
-      res.status(201).send("User Created");
+      res.status(201).json({message: "User Created"})
     }
-  });
-});
+  })
+})
 
 // function checkAuthenticated(req, res, next) {
 //   if (req.isAuthenticated()) {
