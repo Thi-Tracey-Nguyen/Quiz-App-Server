@@ -52,7 +52,7 @@ router.post("/register", (req, res) => {
         password: hashedPassword,
       });
       await newUser.save();
-      res.send("User Created");
+      res.status(201).send("User Created");
     }
   });
 });
