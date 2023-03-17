@@ -8,7 +8,9 @@ import { validationResult } from 'express-validator'
 const router = express.Router()
 
 
-router.get("/", async (req, res) => res.send(await QuizModel.find()))
+router.get("/", async (req, res) => {
+  res.send(await QuizModel.find())
+})
 
 // route to get a quiz by id
 router.get("/:id", async (req, res) => {

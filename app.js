@@ -42,6 +42,13 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(cookieParser(process.env.SESSION_SECRET))
 
+//testing - delete when done
+app.use((req, res, next) => {
+  console.log(req.session)
+  console.log(req.user)
+  next()
+})
+
 // home page
 app.get('/', (req, res) => res.send({ title: 'Quiz App'}))
 
