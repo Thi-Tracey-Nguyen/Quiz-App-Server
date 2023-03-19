@@ -1,4 +1,5 @@
 import { dbClose } from './db.js'
+import bcrypt from 'bcrypt'
 import CategoryModel from './models/categoryModel.js'
 import QuestionModel from './models/questionModel.js'
 import QuizModel from './models/quizModel.js'
@@ -19,12 +20,12 @@ console.log('All users deleted')
 const users = [
 	{
 		username: 'admin123',
-		password: 'admin123',
+		password: await bcrypt.hash('admin123', 10),
 		isAdmin: true
 	}, 
 	{
 		username: 'tester',
-		password: 'tester123',
+		password: await bcrypt.hash('tester123', 10),
 	}
 ]
 
