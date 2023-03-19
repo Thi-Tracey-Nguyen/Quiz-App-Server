@@ -2,6 +2,7 @@ import { dbClose } from './db.js'
 import CategoryModel from './models/categoryModel.js'
 import QuestionModel from './models/questionModel.js'
 import QuizModel from './models/quizModel.js'
+import UserModel from './models/userModel.js'
 
 // Remove all entries from the database
 await QuestionModel.deleteMany()
@@ -10,6 +11,26 @@ await QuizModel.deleteMany()
 console.log('All quizzes deleted')
 await CategoryModel.deleteMany()
 console.log('All categories deleted')
+await UserModel.deleteMany()
+console.log('All users deleted')
+
+// Create admin user and test user
+
+const users = [
+	{
+		username: 'admin123',
+		password: 'admin123',
+		isAdmin: true
+	}, 
+	{
+		username: 'tester',
+		password: 'tester123',
+	}
+]
+
+// Insert users into the database
+await UserModel.insertMany(users)
+console.log('All users seeded successfully')
 
 // Create categories to seed
 const categoriesArray = [

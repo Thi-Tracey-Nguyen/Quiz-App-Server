@@ -14,8 +14,8 @@ const router = express.Router()
 //   res.render('index.ejs', { name: user.name })
 // })
 
-router.get('/login', checkNotAuthenticated, (req, res) => {
-  res.render('login.ejs')
+router.get('/user', checkAuthenticated, (req, res) => {
+  res.send({message: `Welcome back, ${req.user.username}`})
 })
 
 // app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
@@ -60,18 +60,17 @@ router.post("/register", (req, res) => {
     }
   })
 })
+ 
+function checkAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    next()
+  }
+  // res.json({ message: "Unauthorized" })
+}
 
-// function checkAuthenticated(req, res, next) {
-//   if (req.isAuthenticated()) {
-//     return next()
-//   }
-//   res.redirect('/login')
-// }
-
-router.delete('/logout', (req, res, next) => {
-  req.logOut(err => {
-    if (err) return next(err)
-    res.redirect('/login')
+router.get('/logout', (req, res, next) => {
+  req.logout(function(err) {
+    if (err) { return next(err) }
   })
 })
 
