@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import passport from 'passport'
 import mongoose from 'mongoose'
 import User from '../models/userModel.js'
-import {issueJWT} from '../jwtUtils.js'
+import {issueJWT, comparePassword } from '../jwtUtils.js'
 
 const router = express.Router()
 
@@ -13,21 +13,8 @@ const router = express.Router()
 //   res.render('index.ejs', { name: user.name })
 // })
 
-router.get('/user/:id', checkAuthenticated, async (req, res) => {
-  if (mongoose.isValidObjectId(req.params.id)) {
-    try {
-      const user = await User.findById(req.params.id)
-      if (user) {
-        res.send(user)
-      } else {
-        res.status(404).send({ error: 'User not found!' }) // catch error when Id is valid but does not exist in db
-      }
-    } catch (err) {
-      console.log({ error: err.message })
-    }
-  } else {
-    res.status(500).send({ error: 'Invalid Id!' })
-  }
+router.get('/user/:id', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+  res.json(req.user) 
 })
 
 // app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
@@ -39,10 +26,27 @@ router.get('/user/:id', checkAuthenticated, async (req, res) => {
 router.post("/login", (req, res, next) => {
   User.findOne({ username: req.body.username })
     .then((user) => {
+
       if (!user) {
         res.status(401).json({ message: "Could not find user "})
       }
-      // const isValid = 
+      const isValid = comparePassword(req.body.password, user.password)
+
+      if (isValid) {
+        const tokenObject = issueJWT(user)
+        res.json({ 
+          message: "Login successfully.", 
+          user: user, 
+          token: tokenObject.token, 
+          expiresIn: tokenObject.expires
+        })
+
+      } else {
+        res.status(401).json({ message: "Invalid username or password." })
+      }
+    })
+    .catch((err) => {
+      next(err)
     })
 })
 

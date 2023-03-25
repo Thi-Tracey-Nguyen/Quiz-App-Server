@@ -29,4 +29,4 @@ function issueJWT(user) {
   }
 }
 
-export {issueJWT} 
+export {issueJWT, comparePassword} 
