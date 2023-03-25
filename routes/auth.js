@@ -13,7 +13,7 @@ const router = express.Router()
 //   res.render('index.ejs', { name: user.name })
 // })
 
-router.get('/user/:id', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+router.get('/user', passport.authenticate('jwt', {session: false}), (req, res, next) => {
   res.json(req.user) 
 })
 

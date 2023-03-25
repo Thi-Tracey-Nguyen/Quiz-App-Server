@@ -17,9 +17,9 @@ console.log('All users deleted')
 
 // Create admin user and test user
 
-const users = [
+const userArray = [
 	{
-		username: 'admin123',
+		username: 'admin',
 		password: await bcrypt.hash('admin123', 10),
 		isAdmin: true
 	}, 
@@ -30,7 +30,7 @@ const users = [
 ]
 
 // Insert users into the database
-await UserModel.insertMany(users)
+const users = await UserModel.insertMany(userArray)
 console.log('All users seeded successfully')
 
 // Create categories to seed
@@ -45,12 +45,12 @@ const categories = await CategoryModel.insertMany(categoriesArray)
 console.log('All categories seeded successfully')
 
 const quizzesArray = [
-    { category: categories[0], title: 'Random Facts', author: 'Quiz App Staff', questions: [], image: '/question-mark.png' },
-    { category: categories[0], title: 'Chemistry Facts', author: 'Quiz App Staff', questions: [], image: '/maths.png' },
-    { category: categories[1], title: 'Movie Trivia', author: 'Quiz App Staff', questions: [], image: '/movies.png' },
-    { category: categories[1], title: 'Geeky TV Shows', author: 'Quiz App Staff', questions: [], image: '/tv.png' },
-    { category: categories[2], title: 'Geography Master', author: 'Quiz App Staff', questions: [], image: '/geography.png' },
-    { category: categories[2], title: 'Rivers & Australia', author: 'Quiz App Staff', questions: [], image: '/nature.png' }
+    { category: categories[0], title: 'Random Facts', author: users[0].username, questions: [], image: '/question-mark.png', authorId: users[0]._id },
+    { category: categories[0], title: 'Chemistry Facts', author: users[0].username, questions: [], image: '/maths.png', authorId: users[0]._id },
+    { category: categories[1], title: 'Movie Trivia', author: users[0].username, questions: [], image: '/movies.png', authorId: users[0]._id},
+    { category: categories[1], title: 'Geeky TV Shows', author: users[0].username, questions: [], image: '/tv.png', authorId: users[0]._id },
+    { category: categories[2], title: 'Geography Master', author: users[1].username, questions: [], image: '/geography.png', authorId: users[1]._id },
+    { category: categories[2], title: 'Rivers & Australia', author: users[1].username, questions: [], image: '/nature.png', authorId: users[1]._id }
 ]
 
 // Insert quizzes into the database

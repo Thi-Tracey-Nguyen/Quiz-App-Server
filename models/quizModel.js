@@ -15,7 +15,12 @@ const quizSchema = new Schema({
     }, 
     author: {
         type: String,
-        required: true
+        required: true, 
+        default: 'Guest'
+    },
+    authorId: {
+        type: String, 
+        ref: 'User'
     },
     questions: {
         type: Array,
