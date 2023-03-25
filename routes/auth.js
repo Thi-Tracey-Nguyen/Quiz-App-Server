@@ -2,10 +2,8 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import passport from 'passport'
 import mongoose from 'mongoose'
-import initializePassport from '../passport-config.js'
-import session from 'express-session'
-import dotenv from 'dotenv'
 import User from '../models/userModel.js'
+import {issueJWT} from '../jwtUtils.js'
 
 const router = express.Router()
 
@@ -39,23 +37,13 @@ router.get('/user/:id', checkAuthenticated, async (req, res) => {
 // }))
 
 router.post("/login", (req, res, next) => {
-  passport.authenticate("local", (err, user) => {
-    if (err) throw err
-    if (!user) res.status(401).send({ message: 'Username or password incorrect' })
-    else {
-      req.logIn(user, (err) => {
-        if (err) throw err
-        res.send(user)
-
-        //send session info back 
-        const session = req.session
-        session.isAuthenticated = true
-        res.send(req.session._id)
-      })
-      
-    }
-})
-  (req, res, next)
+  User.findOne({ username: req.body.username })
+    .then((user) => {
+      if (!user) {
+        res.status(401).json({ message: "Could not find user "})
+      }
+      // const isValid = 
+    })
 })
 
 router.post("/register", (req, res) => {
@@ -69,8 +57,12 @@ router.post("/register", (req, res) => {
         username: req.body.username,
         password: hashedPassword,
       });
-      await newUser.save();
-      res.status(201).json({message: "User Created"})
+
+      const user = await newUser.save()
+
+      const jwt = issueJWT(user)
+
+      res.status(201).json({message: "User Created", user: user, token: jwt.token, expiresIn: jwt.expires})
     }
   })
 })
