@@ -1,20 +1,23 @@
-import express from 'express'
+import express, { request } from 'express'
 import bcrypt from 'bcrypt'
 import passport from 'passport'
-import mongoose from 'mongoose'
 import User from '../models/userModel.js'
 import {issueJWT, comparePassword } from '../jwtUtils.js'
+import {requireAuth} from '../middleware/authMiddleware.js'
 
 const router = express.Router()
 
-// routes
-// router.get('/', (req, res) => {
-//   const user = req.user || { name: 'Guest' }
-//   res.render('index.ejs', { name: user.name })
-// })
-
-router.get('/user', passport.authenticate('jwt', {session: false}), (req, res, next) => {
-  res.json(req.user) 
+router.get('/user/:id', requireAuth, async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id)
+    if (!user) {
+      res.status(401).json({ message: "Could not find user "})
+    } else {
+      res.json(user)
+    }
+  } catch (err) {
+    throw new Error(err.message)
+  }
 })
 
 // app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
@@ -23,31 +26,32 @@ router.get('/user', passport.authenticate('jwt', {session: false}), (req, res, n
 //   failureFlash: true
 // }))
 
-router.post("/login", (req, res, next) => {
-  User.findOne({ username: req.body.username })
-    .then((user) => {
+router.post("/login", async (req, res, next) => {
+  try {
 
-      if (!user) {
-        res.status(401).json({ message: "Could not find user "})
-      }
-      const isValid = comparePassword(req.body.password, user.password)
+    const user = await User.findOne({ username: req.body.username })
 
-      if (isValid) {
-        const tokenObject = issueJWT(user)
-        res.json({ 
-          message: "Login successfully.", 
-          user: user, 
-          token: tokenObject.token, 
-          expiresIn: tokenObject.expires
-        })
+    if (!user) {
+      res.status(401).json({ message: "Could not find user "})
+    }
+    const isValid = comparePassword(req.body.password, user.password)
 
-      } else {
-        res.status(401).json({ message: "Invalid username or password." })
-      }
-    })
-    .catch((err) => {
-      next(err)
-    })
+    if (isValid) {
+      const tokenObject = issueJWT(user._id, user.isAdmin)
+      res.json({ 
+        message: "Login successfully.", 
+        user: user, 
+        token: tokenObject.token, 
+        expiresIn: tokenObject.expires
+      })
+
+    } else {
+      res.status(401).json({ message: "Invalid username or password." })
+    }
+  } 
+  catch(err) {
+    req.status(500).json({ message: err.message })
+  }
 })
 
 router.post("/register", (req, res) => {
@@ -71,13 +75,6 @@ router.post("/register", (req, res) => {
   })
 })
  
-function checkAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    next()
-  } else {
-    res.status(401).json({ message: "Unauthorized" })
-  }
-}
 
 router.get('/logout', (req, res, next) => {
   req.logout(function(err) {
@@ -86,11 +83,5 @@ router.get('/logout', (req, res, next) => {
   res.json({ message: 'Logout successfully' })
 })
 
-function checkNotAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return res.redirect('/')
-  }
-  next()
-}
 
 export default router

@@ -1,9 +1,10 @@
-import express from 'express'
+import express, { request } from 'express'
 import mongoose from 'mongoose'
 import QuizModel from "../models/quizModel.js"
 import CategoryModel from "../models/categoryModel.js"
 import { quizValidation } from './validations.js'
 import { validationResult } from 'express-validator'
+import {requireAuth, verifyAdmin } from '../middleware/authMiddleware.js'
 
 const router = express.Router()
 
@@ -11,6 +12,31 @@ const router = express.Router()
 router.get("/", async (req, res) => {
   res.send(await QuizModel.find())
 })
+
+//get quizzes by authorId
+router.get("/user/:id", requireAuth, async (req, res) => {
+  try {
+    const authorId = req.params.id
+    const quizzes = await QuizModel.find({authorId: authorId})
+    res.send(quizzes)
+  } 
+  catch(err) {
+    res.status(500).send({ error: err.message })
+  }
+})
+
+//get quizzes by authorId
+router.get("/admin", requireAuth, verifyAdmin, async (req, res) => {
+  try {
+    const quizzes = await QuizModel.find()
+    res.send(quizzes)
+  } 
+  catch(err) {
+    res.status(500).send({ error: err.message })
+  }
+})
+
+
 
 // route to get a quiz by id
 router.get("/:id", async (req, res) => {

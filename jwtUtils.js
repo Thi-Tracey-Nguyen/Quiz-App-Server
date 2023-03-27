@@ -14,11 +14,13 @@ function comparePassword(plainText, hash) {
 
 
 // funtion to create JWT
-function issueJWT(user) {
-  const _id = user._id
+function issueJWT(id, isAdmin) {
   const expiresIn = '1d'
   const payload = {
-    sub: _id,
+    userInfo: {
+      id: id,
+      isAdmin: isAdmin
+    },
     iat: Date.now()
   }
   const signedToken = jsonwebtoken.sign(payload, PRIV_KEY, { expiresIn: expiresIn, algorithm: 'RS256' })
@@ -29,4 +31,9 @@ function issueJWT(user) {
   }
 }
 
-export {issueJWT, comparePassword} 
+function parseJwt (token) {
+  return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+}
+
+
+export {issueJWT, comparePassword, parseJwt }
