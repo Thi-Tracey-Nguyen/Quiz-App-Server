@@ -1,15 +1,12 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import passport from 'passport'
 import cookieParser from 'cookie-parser'
-import MongoDBStore from 'connect-mongodb-session'
-// import session from 'express-session'
 import categoryRouter from './routes/category.js'
 import quizRouter from './routes/quiz.js'
 import questionsRouter from './routes/question.js'
 import authRouter from './routes/auth.js'
-import config from './passport-config.js'
+import onecallRouter from './routes/one-call.js'
 
 //config
 const app = express()
@@ -44,11 +41,11 @@ app.use(express.json())
 app.use(cookieParser(process.env.SESSION_SECRET))
 
 //testing - delete when done
-app.use((req, res, next) => {
-  console.log(req.session)
-  console.log(req.user)
-  next()
-})
+// app.use((req, res, next) => {
+//   console.log(req.session)
+//   console.log(req.user)
+//   next()
+// })
 
 // home page
 app.get('/', (req, res) => res.send({ title: 'Quiz App'}))
@@ -56,6 +53,8 @@ app.get('/', (req, res) => res.send({ title: 'Quiz App'}))
 // app.get('/categories', async (req, res) => res.send(await CategoryModel.find()))
 
 //all routes
+app.use('/onecall', onecallRouter)
+
 app.use('/categories', categoryRouter)
 
 

@@ -71,6 +71,7 @@ router.post("/register", (req, res) => {
       const jwt = issueJWT(user)
 
       res.status(201).json({message: "User Created", user: user, token: jwt.token, expiresIn: jwt.expires})
+      console.log(res)
     }
   })
 })
