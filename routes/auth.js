@@ -20,11 +20,6 @@ router.get('/user/:id', requireAuth, async (req, res, next) => {
   }
 })
 
-// app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
-//   successRedirect: '/',
-//   failureRedirect: '/login', 
-//   failureFlash: true
-// }))
 
 router.post("/login", async (req, res, next) => {
   try {
@@ -50,7 +45,7 @@ router.post("/login", async (req, res, next) => {
     }
   } 
   catch(err) {
-    req.status(500).json({ message: err.message })
+    res.status(500).json({ message: err.message })
   }
 })
 

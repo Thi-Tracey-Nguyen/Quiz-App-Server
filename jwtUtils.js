@@ -6,6 +6,7 @@ import path from 'path'
 const __dirname = path.resolve()
 const pathToKey = path.join(__dirname, 'id_rsa_priv.pem');
 const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
+// const PRIV_KEY = process.env.PRIV_KEY
 
 // function to compare password input and harshed password
 function comparePassword(plainText, hash) {
