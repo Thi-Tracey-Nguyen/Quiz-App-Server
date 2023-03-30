@@ -1,37 +1,39 @@
-import local from 'passport-local'
-import bcrypt from 'bcrypt'
+import fs from 'fs'
+import path from 'path'
+// import { Strategy } from 'passport-local'
+import jwt from 'passport-jwt'
 import User from './models/userModel.js'
 
-const LocalStrategy = local.Strategy
+const JwtStrategy = jwt.Strategy
+const ExtractJwt = jwt.ExtractJwt
 
-export default function initialize(passport) {
+const __dirname = path.resolve()
+const pathToKey = path.join(__dirname, 'id_rsa_pub.pem')
+const PUB_KEY = fs.readFileSync(pathToKey, 'utf-8')
+
+const options = {}
+
+options.jwtFromRequest =  ExtractJwt.fromAuthHeaderAsBearerToken()
+options.secretOrKey = PUB_KEY
+options.algorithm = ['RS256']
+
+
+function config(passport) {
   passport.use(
-    new LocalStrategy((username, password, done) => {
-      User.findOne({ username: username }, (err, user) => {
-        if (err) throw err;
-        if (!user) return done(null, false);
-        bcrypt.compare(password, user.password, (err, result) => {
-          if (err) throw err;
-          if (result === true) {
-            return done(null, user);
-          } else {
-            return done(null, false);
-          }
-        });
-      });
-    })
-  );
+    new JwtStrategy((options, function(jwt_payload, done) {
+      User.findOne({ _id: jwt_payload.sub }, function(err, user) {
+        if (err) {
+          return done(err, false);
+      }
+      if (user) {
+          return done(null, user);
+      } else {
+          return done(null, false);
+      }
+      }) 
+      
+}))
+)}
 
-  passport.serializeUser((user, cb) => {
-    cb(null, user.id);
-  });
-  passport.deserializeUser((id, cb) => {
-    User.findOne({ _id: id }, (err, user) => {
-      // const userInformation = {
-      //   username: user.username,
-      // };
-      // cb(err, userInformation);
-      cb(err, user)
-    });
-  });
-};
+export default config
+
