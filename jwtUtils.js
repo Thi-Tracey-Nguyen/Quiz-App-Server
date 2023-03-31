@@ -15,12 +15,13 @@ function comparePassword(plainText, hash) {
 
 
 // funtion to create JWT
-function issueJWT(id, isAdmin) {
+function issueJWT(id, isAdmin, username) {
   const expiresIn = '1d'
   const payload = {
     userInfo: {
       id: id,
-      isAdmin: isAdmin
+      isAdmin: isAdmin, 
+      username: username
     },
     iat: Date.now()
   }

@@ -16,8 +16,8 @@ router.get("/", async (req, res) => {
 //get quizzes by authorId
 router.get("/user/:id", requireAuth, async (req, res) => {
   try {
-    const authorId = req.params.id
-    const quizzes = await QuizModel.find({authorId: authorId})
+    const id = req.params.id
+    const quizzes = await QuizModel.find({authorId: id})
     res.send(quizzes)
   } 
   catch(err) {
@@ -70,8 +70,8 @@ router.post("/", quizValidation(), async (req, res) => {
 
   try {
     // 1. extract information from the user's input
-    const { category, title, author, image } = req.body
-
+    const { category, title, author, authorId, image } = req.body
+    console.log(req.body)
     // 2. Create a new quiz object
     // 2.1 Check if the category exists
     const categoryObject = await CategoryModel.findOne({ name: category })
@@ -79,9 +79,12 @@ router.post("/", quizValidation(), async (req, res) => {
       const newQuiz = { 
         category: categoryObject._id, 
         title, 
-        author, 
+        author,
+        authorId, 
         image 
       }
+
+      console.log(newQuiz)
 
       // 2.2. Create a new quiz using newQuiz (sanitised values) 
       const insertedQuiz = await QuizModel.create(newQuiz)

@@ -41,10 +41,10 @@ app.use(express.json())
 app.use(cookieParser(process.env.SESSION_SECRET))
 
 // testing - delete when done
-// app.use((req, res, next) => {
-//   console.log(res)
-//   next()
-// })
+app.use((req, res, next) => {
+  console.log(req)
+  next()
+})
 
 // home page
 app.get('/', (req, res) => res.send({ title: 'Quiz App'}))
