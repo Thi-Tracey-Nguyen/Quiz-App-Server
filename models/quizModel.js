@@ -20,6 +20,7 @@ const quizSchema = new Schema({
     },
     authorId: {
         type: String, 
+        required: true, 
         ref: 'User'
     },
     questions: {

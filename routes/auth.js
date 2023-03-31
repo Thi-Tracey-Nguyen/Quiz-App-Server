@@ -1,6 +1,5 @@
-import express, { request } from 'express'
+import express from 'express'
 import bcrypt from 'bcrypt'
-import passport from 'passport'
 import User from '../models/userModel.js'
 import {issueJWT, comparePassword } from '../jwtUtils.js'
 import {requireAuth} from '../middleware/authMiddleware.js'
@@ -32,7 +31,7 @@ router.post("/login", async (req, res, next) => {
     const isValid = comparePassword(req.body.password, user.password)
 
     if (isValid) {
-      const tokenObject = issueJWT(user._id, user.isAdmin)
+      const tokenObject = issueJWT(user._id, user.isAdmin, user.username)
       res.json({ 
         message: "Login successfully.", 
         user: user, 
