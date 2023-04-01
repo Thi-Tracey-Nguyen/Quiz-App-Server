@@ -119,28 +119,27 @@ router.delete("/:id", async (req, res) => {
 
 // edit a quiz
 router.put("/:id", async (req, res) => {
-  try {
-    // 1. extract information from the user's input
-    const { title, author, image } = req.body
-
+  // 1. extract information from the user's input
+  const { title, authorId, author, image } = req.body
+  let { category } = req.body
+  // try {
     // 2. Create a new quiz object
     // 2.1 Get the quiz from id
     const oldQuiz = await QuizModel.findById(req.params.id)
-    let category
-    // 2.2 if the category is provided, check if it exists
-    if (req.body.category) {  
-      const categoryObject = await CategoryModel.findOne({ name: category })
-      if (!categoryObject) {
-        res.status(404).send({ error: 'Category not found' })
-      } else {
-        category = categoryObject._id
-      }
+
+    // 2.2 extract category id from category name
+    const categoryObject = await CategoryModel.findOne({ name: category })
+    if (!categoryObject) {
+      res.status(404).send({ error: 'Category not found' })
+    } else {
+      category = categoryObject._id
     }
     // 2.3 if category is not provided, use existing category info
     const newQuiz = { 
       category: category || oldQuiz.category, 
       title: title || oldQuiz.title, 
-      author: author || oldQuiz.author, 
+      authorId: oldQuiz.authorId, 
+      author: oldQuiz.author,
       image: image || oldQuiz.image
     }
     // 2.4. Edit the existing quiz with info from newQuiz 
@@ -152,10 +151,10 @@ router.put("/:id", async (req, res) => {
     } else {
       res.status(404).send({ error: 'Quiz not found' })
     }
-  } 
-  catch (err) {
-    res.status(500).send({ error: err.message })
-  }
+  // } 
+  // catch (err) {
+  //   res.send({ error: err.message })
+  // }
 })
 
 
