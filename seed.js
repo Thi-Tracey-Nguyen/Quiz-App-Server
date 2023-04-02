@@ -38,6 +38,7 @@ const categoriesArray = [
     { name: 'Science' },
     { name: 'TV & Movies' },
     { name: 'Geography' },
+    { name: 'Music' }
 ]
 
 // Insert categories into the database
@@ -50,7 +51,8 @@ const quizzesArray = [
     { category: categories[1], title: 'Movie Trivia', author: users[0].username, questions: [], image: '/movies.png', authorId: users[0]._id},
     { category: categories[1], title: 'Geeky TV Shows', author: users[0].username, questions: [], image: '/tv.png', authorId: users[0]._id },
     { category: categories[2], title: 'Geography Master', author: users[1].username, questions: [], image: '/geography.png', authorId: users[1]._id },
-    { category: categories[2], title: 'Rivers & Australia', author: users[1].username, questions: [], image: '/nature.png', authorId: users[1]._id }
+    { category: categories[2], title: 'Rivers & Australia', author: users[1].username, questions: [], image: '/nature.png', authorId: users[1]._id },
+    { category: categories[3], title: 'Music Trivia', author: users[0].username, questions: [], image: '/music.png', authorId: users[0]._id },
 ]
 
 // Insert quizzes into the database
@@ -154,6 +156,30 @@ const questionsArray = [
         question: 'How many states are in Australia?',
         correctAnswer: '6',
         incorrectAnswers: ['7', '8', '9']
+    }],
+    [{
+        quizId: quizzes[6]._id,
+        question: 'What singer holds the world record for most words in a hit single?',
+        correctAnswer: 'Eminem',
+        incorrectAnswers: ['Snoop Dogg', 'Jay-Z', '50 Cent']
+    },
+    {
+        quizId: quizzes[6]._id,
+        question: 'What was the first rock-n-roll song to hit #1 on the charts?',
+        correctAnswer: 'Rock Around the Clock',
+        incorrectAnswers: ['Heartbreak Hotel', 'Tutti-Fruitti', 'Whole Lotta Love']
+    },
+    {
+        quizId: quizzes[6]._id,
+        question: "Which movie features the Aerosmith song 'I Don't Wanna Miss A Thing'?",
+        correctAnswer: 'Armageddon',
+        incorrectAnswers: ['Pirates of the Caribbean', 'Working Girl', 'The Godfather']
+    },
+    {
+        quizId: quizzes[6]._id,
+        question: 'Which US city is often considered to be the world’s country music capital?',
+        correctAnswer: 'Nashville',
+        incorrectAnswers: ['Louisville', 'Houston', 'Denver']
     }]
 ]
 
