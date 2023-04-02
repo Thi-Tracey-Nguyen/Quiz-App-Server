@@ -91,12 +91,13 @@ router.put('/:id', questionValidation(), async (req, res) => {
   }
 
   try {
-    const { question, correctAnswer, incorrectAnswers } = req.body
+    const { quizId, question, correctAnswer, incorrectAnswers } = req.body
 
     const newQuestion = {
-      question: question,
-      correctAnswer: correctAnswer, 
-      incorrectAnswers: incorrectAnswers
+      quizId,
+      question,
+      correctAnswer,
+      incorrectAnswers,
     }
     const updatedQuestion = await QuestionModel.findByIdAndUpdate(req.params.id, newQuestion, { returnDocument: 'after' })
     res.send(updatedQuestion)

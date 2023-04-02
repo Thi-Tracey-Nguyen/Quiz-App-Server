@@ -71,11 +71,8 @@ router.post("/register", (req, res) => {
 })
  
 
-router.get('/logout', (req, res, next) => {
-  req.logout(function(err) {
-    if (err) { return next(err) }
-  })
-  res.json({ message: 'Logout successfully' })
+router.get('/logout', requireAuth, (req, res) => {
+  res.status(201).json({message: "Logout sucessfully", user: null, token: '', expiresIn: 1})
 })
 
 
